@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { RxCross1 } from "react-icons/rx";
 import fetchBooks from '../services/fetchBooks';
 import Bookcard from '../components/Bookcard';
@@ -6,21 +6,27 @@ import { Link } from 'react-router-dom';
 import { ImBooks } from "react-icons/im";
 import { loadBookshelf, saveBookshelf } from '../utils/localStorage';
 
-
 function BooksearchPage() {
   const [Query, setQuery] = useState("");
   const [Results, setResults] = useState([])
   const [Bookshelf, setBookshelf] = useState(loadBookshelf())
 
-  const handleChange = async (e) => {
+  useEffect(() => {
+    const timer = setTimeout(async () => {
+      if (Query.length > 0) {
+        let response = await fetchBooks(Query);
+        setResults(response)
+      } else {
+        setResults([])
+      }
+    }, 300);
+
+    return ()=>clearTimeout(timer);
+  }, [Query])
+
+  const handleChange = (e) => {
     const query = e.target.value;
     setQuery(query);
-    if (query.length > 0) {
-      let response = await fetchBooks(query);
-      setResults(response)
-    } else {
-      setResults([])
-    }
   }
   const addToBookshelf = (book) => {
     const existingBook = Bookshelf.find((elem) => elem.key === book.key);
@@ -31,11 +37,12 @@ function BooksearchPage() {
     }
   }
   const clearField = useCallback(() => {
-    if (Query.length > 0){
+    if (Query.length > 0) {
       setQuery("");
       setResults([]);
     }
   }, [Query])
+  console.log(Query);
   return (
     <div className='w-full h-screen text-white bg-slate-600'>
       <nav className='fixed w-full h-[10%] bg-black flex items-center justify-between pl-10 pr-20'>
