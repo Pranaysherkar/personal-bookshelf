@@ -16,9 +16,9 @@ function BookshelfPage() {
   }
   return (
     <div className='w-full h-screen'>
-      <button onClick={goBack} className='bg-sky-500 text-white text-xl flex m-2 items-center gap-2 px-2 rounded-md' ><FaArrowLeftLong />Go Back </button>
+      <button onClick={goBack} className='bg-sky-500 text-white text-xl flex md:m-2 m-5  items-center gap-2 px-2 rounded-md' ><FaArrowLeftLong />Go Back </button>
       <h1 className='text-center text-4xl text-white font-semibold'>My Bookshelf</h1>
-      <div className='min-h-[90%] w-full flex flex-wrap items-center gap-10 justify-center pt-24 pb-5 px-2 shrink-0'>
+      <div className='min-h-[90%] w-full flex flex-wrap items-center gap-10 justify-center pt-24 pb-5 px-2'>
         {Bookshelf.map((book) => (
           <Bookcard key={book.key} book={book} removeBook={removeBook} />
         ))}
